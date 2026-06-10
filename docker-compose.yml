@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  cloudposture:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DEMO_MODE=true
+    volumes:
+      - .:/app
+    restart: unless-stopped

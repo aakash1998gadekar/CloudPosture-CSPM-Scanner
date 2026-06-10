@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudPosture — CSPM Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>☁️ CloudPosture</h1>
+            <span class="subtitle">Cloud Security Posture Management</span>
+            <button id="rescan-btn" onclick="runScan()">🔄 Re-Scan</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- KPI Cards -->
+        <section class="kpi-grid">
+            <div class="kpi-card" id="kpi-score">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">Compliance Score</div>
+            </div>
+            <div class="kpi-card" id="kpi-total">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">Total Checks</div>
+            </div>
+            <div class="kpi-card kpi-pass" id="kpi-passed">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">Passed</div>
+            </div>
+            <div class="kpi-card kpi-fail" id="kpi-failed">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">Failed</div>
+            </div>
+            <div class="kpi-card kpi-critical" id="kpi-critical">
+                <div class="kpi-value">--</div>
+                <div class="kpi-label">Critical</div>
+            </div>
+        </section>
+
+        <!-- Charts Row -->
+        <section class="charts-row">
+            <div class="chart-card">
+                <h3>Compliance by Service</h3>
+                <div id="chart-services"></div>
+            </div>
+            <div class="chart-card">
+                <h3>Findings by Severity</h3>
+                <div id="chart-severity"></div>
+            </div>
+        </section>
+
+        <!-- Findings Table -->
+        <section class="findings-section">
+            <div class="findings-header">
+                <h3>Security Findings</h3>
+                <div class="filters">
+                    <select id="filter-service" onchange="filterFindings()">
+                        <option value="">All Services</option>
+                        <option value="IAM">IAM</option>
+                        <option value="S3">S3</option>
+                        <option value="EC2">EC2</option>
+                        <option value="RDS">RDS</option>
+                        <option value="CloudTrail">CloudTrail</option>
+                    </select>
+                    <select id="filter-severity" onchange="filterFindings()">
+                        <option value="">All Severities</option>
+                        <option value="CRITICAL">Critical</option>
+                        <option value="HIGH">High</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="LOW">Low</option>
+                    </select>
+                    <select id="filter-status" onchange="filterFindings()">
+                        <option value="">All Statuses</option>
+                        <option value="FAIL">Failed</option>
+                        <option value="PASS">Passed</option>
+                        <option value="WARNING">Warning</option>
+                    </select>
+                </div>
+            </div>
+            <table class="findings-table">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Severity</th>
+                        <th>Service</th>
+                        <th>Check ID</th>
+                        <th>Finding</th>
+                        <th>CIS Ref</th>
+                        <th>Resource</th>
+                    </tr>
+                </thead>
+                <tbody id="findings-body">
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Finding Detail Modal -->
+        <div id="finding-modal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+                <h3 id="modal-title"></h3>
+                <div id="modal-body"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>CloudPosture CSPM Scanner — Demo Mode | CIS AWS Benchmark v2.0</p>
+    </footer>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
